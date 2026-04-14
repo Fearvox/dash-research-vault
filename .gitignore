@@ -1,0 +1,12 @@
+# Decay metadata (auto-generated)
+04-memory/.meta/decay-scores.json
+04-memory/.meta/access-log.jsonl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
