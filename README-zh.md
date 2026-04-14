@@ -1,14 +1,28 @@
-# Dash Research Vault
+# Dash Research Vault {#top}
 
 > 多智能体研究知识库 — Evensong 风格记忆因果性 + Ebbinghaus 衰退 + L2 压力自进化
 
-[![Research Vault](https://img.shields.io/badge/Research-Vault-blue?style=flat-square)](https://github.com/Fearvox/dash-research-vault)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![Language: Bilingual](https://img.shields.io/badge/Language-EN%2BZH-yellow?style=flat-square)](README.md)
+<!-- Language Toggle -->
+<p align="center">
+  <a href="./README.md">🇺🇸 English</a> · <a href="#top">🇨🇳 中文</a>
+</p>
 
 ---
 
-## 概述
+<!-- Custom Badges -->
+<p align="center">
+
+[![Research Vault](https://img.shields.io/badge/Research_Vault-161A1D?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Fearvox/dash-research-vault)
+[![License: CC BY-NC-ND](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-EF2D56?style=for-the-badge&logo=creative-commons&logoColor=white)](LICENSE)
+[![Bilingual: EN+ZH](https://img.shields.io/badge/Bilingual-FF6B35?style=for-the-badge&logo=translate&logoColor=white)](./README.md)
+[![EverMind](https://img.shields.io/badge/EverMind.ai-00D4AA?style=for-the-badge&logo=brain&logoColor=white)](https://evermind.ai)
+[![Shields.io](https://img.shields.io/badge/Shields-000?style=for-the-badge&logo=starship&logoColor=white)](https://shields.io)
+
+</p>
+
+---
+
+## 概述 {#概述}
 
 实现 **Evensong 三大核心发现**的多智能体研究知识库：
 
@@ -18,7 +32,11 @@
 | 压力触发自进化 | 每个 agent 写入 L1 自驱标准 | #internal 交叉审核 |
 | 递归污染控制 | 三层门控 (Agent→Admin→Researcher) | 写入需审核，防止低质信息自增强 |
 
-## 目录结构
+[↑ 返回顶部](#top)
+
+---
+
+## 目录结构 {#目录结构}
 
 ```
 dash-research-vault/
@@ -27,38 +45,50 @@ dash-research-vault/
 ├── 02-channels/                 ← 6 种频道类型
 ├── 03-internal-only/            ← 隐私管控策略层
 ├── 04-memory/                   ← 三层记忆 + 衰退机制
-│   ├── public/                  ← 所有 agent 可读
-│   ├── restricted/              ← 仅 Admin 可达
-│   └── .meta/                   ← 衰退元数据
+│   ├── public/                 ← 所有 agent 可读
+│   ├── restricted/             ← 仅 Admin 可达
+│   └── .meta/                  ← 衰退元数据
 └── docs/                        ← 研究论文
 ```
 
-## 核心图表
+[↑ 返回顶部](#top)
 
-以下图表从 Evensong R012-E 基准测试论文提取。
+---
 
-### 图 1：集群分类学 (Swarm Taxonomy)
+## 核心图表 {#核心图表}
+
+以下图表从 **Evensong R012-E** 基准测试论文提取。
+
+### 图 1：集群分类学 (Swarm Taxonomy) {#图1}
 ![Swarm Taxonomy](./00-overview/figures/fig1-swarm-taxonomy.png)
 
-### 图 2：行为热力图 (Behavioral Heatmap)
+### 图 2：行为热力图 (Behavioral Heatmap) {#图2}
 ![Behavioral Heatmap](./00-overview/figures/fig2-behavioral-heatmap.png)
 
-### 图 3：记忆因果链 (Memory Causation Chain)
+### 图 3：记忆因果链 (Memory Causation Chain) {#图3}
 ![Memory Causation](./00-overview/figures/fig3-memory-causation.png)
 
-### 图 4：L2 压力自进化 (L2 Pressure Self-Evolution)
+### 图 4：L2 压力自进化 (L2 Pressure Self-Evolution) {#图4}
 ![L2 Pressure](./00-overview/figures/fig4-l2-pressure-timeline.png)
 
-## 研究论文
+[↑ 返回顶部](#top)
+
+---
+
+## 研究论文 {#研究论文}
 
 | 论文 | 语言 | 文件 |
 |------|------|------|
 | Evensong R012-E Benchmark | 英文 | [evensong-paper-en.pdf](./docs/evensong-paper-en.pdf) |
 | Evensong R012-E Benchmark | 中文 | [evensong-paper-zh.pdf](./docs/evensong-paper-zh.pdf) |
 
-## 知识库层级
+[↑ 返回顶部](#top)
 
-### 04-memory — 三层记忆
+---
+
+## 知识库层级 {#知识库层级}
+
+### 04-memory — 三层记忆 {#三层记忆}
 
 | 层级 | 读取权限 | 写入权限 | 衰退速度 |
 |------|----------|----------|----------|
@@ -66,11 +96,15 @@ dash-research-vault/
 | `restricted/` | 仅 Admin | 审核门控 | 中速 (difficulty=2.0) |
 | `internal-only/` | 仅 Researcher | 直接写入 | 慢速 (difficulty=4.0) |
 
-### 03-internal-only — 策略层
+### 03-internal-only — 策略层 {#策略层}
 
 包含敏感策略文档。无 agent 访问权限——仅 Researcher 可视。
 
-## 衰退算法
+[↑ 返回顶部](#top)
+
+---
+
+## 衰退算法 {#衰退算法}
 
 基于 **Ebbinghaus 遗忘曲线**，按 difficulty 加权：
 
@@ -86,7 +120,11 @@ retention(t) = e^(-t / (difficulty × half_life))
 | 2.0 (技术) | 144h | 技术知识 |
 | 0.5 (对话) | 36h | 对话摘录 |
 
-## 初始化
+[↑ 返回顶部](#top)
+
+---
+
+## 初始化 {#初始化}
 
 ```bash
 # 克隆知识库
@@ -98,6 +136,25 @@ cd dash-research-vault
 # 配置 02-channels/ 中的频道名称
 # 设置 04-memory/.meta/decay-config.md 中的衰退参数
 ```
+
+[↑ 返回顶部](#top)
+
+---
+
+## 外部链接 {#外部链接}
+
+| 资源 | 描述 |
+|------|------|
+| [EverMind.ai](https://evermind.ai) | 记忆与认知研究平台 |
+| [Evensong Benchmarks](https://bench.zonicdesign.art/evensong) | 交互式基准测试可视化 |
+| [DASH SHATTER](https://dash-shatter.vercel.app) | Agent 产品站点 |
+
+---
+
+## 语言版本
+
+- [🇺🇸 English README](./README.md)
+- [🇨🇳 中文 README](./README-zh.md)
 
 ---
 
