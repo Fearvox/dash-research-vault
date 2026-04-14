@@ -1,28 +1,25 @@
-# Dash Research Vault {#top}
+# Dash Research Vault
 
 > Multi-agent research vault with Evensong-style memory causation, Ebbinghaus decay, and L2 pressure self-evolution.
 
-<!-- Language Toggle -->
 <p align="center">
-  <a href="#top">🇺🇸 English</a> · <a href="./README-zh.md">🇨🇳 中文</a>
+  <a href="./README.md">🇺🇸 English</a> · <a href="./README-zh.md">🇨🇳 中文</a>
 </p>
 
 ---
 
-<!-- Custom Badges -->
 <p align="center">
 
 [![Research Vault](https://img.shields.io/badge/Research_Vault-161A1D?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Fearvox/dash-research-vault)
 [![License: CC BY-NC-ND](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-EF2D56?style=for-the-badge&logo=creative-commons&logoColor=white)](LICENSE)
-[![Bilingual: EN+ZH](https://img.shields.io/badge/Bilingual-FF6B35?style=for-the-badge&logo=translate&logoColor=white)](./README-zh.md)
+[![Bilingual: EN+ZH](https://img.shields.io/badge/Bilingual-FF6B35?style=for-the-badge&logo=translate&logoColor=white)](README-zh.md)
 [![EverMind](https://img.shields.io/badge/EverMind.ai-00D4AA?style=for-the-badge&logo=brain&logoColor=white)](https://evermind.ai)
-[![Shields.io](https://img.shields.io/badge/Shields-000?style=for-the-badge&logo=starship&logoColor=white)](https://shields.io)
 
 </p>
 
 ---
 
-## Overview {#overview}
+## Overview
 
 A multi-agent research vault implementing **three Evensong core findings**:
 
@@ -32,11 +29,11 @@ A multi-agent research vault implementing **three Evensong core findings**:
 | Pressure-Triggered Self-Evolution | L1 self-drive criteria in each agent | Cross-review in #internal |
 | Recursive Contamination Control | Three-tier gate (Agent→Admin→Researcher) | Write requires review |
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## Directory Structure {#structure}
+## Directory Structure
 
 ```
 dash-research-vault/
@@ -51,44 +48,48 @@ dash-research-vault/
 └── docs/                        ← Research papers
 ```
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## Key Figures {#figures}
+## Key Figures
 
 These figures are extracted from the **Evensong R012-E** benchmark paper.
 
-### Figure 1: Swarm Taxonomy {#fig1}
+### Figure 1: Swarm Taxonomy
+
 ![Swarm Taxonomy](./00-overview/figures/fig1-swarm-taxonomy.png)
 
-### Figure 2: Behavioral Heatmap {#fig2}
+### Figure 2: Behavioral Heatmap
+
 ![Behavioral Heatmap](./00-overview/figures/fig2-behavioral-heatmap.png)
 
-### Figure 3: Memory Causation Chain {#fig3}
+### Figure 3: Memory Causation Chain
+
 ![Memory Causation](./00-overview/figures/fig3-memory-causation.png)
 
-### Figure 4: L2 Pressure Self-Evolution {#fig4}
+### Figure 4: L2 Pressure Self-Evolution
+
 ![L2 Pressure](./00-overview/figures/fig4-l2-pressure-timeline.png)
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## Research Papers {#papers}
+## Research Papers
 
 | Paper | Language | File |
 |-------|----------|------|
 | Evensong R012-E Benchmark | English | [evensong-paper-en.pdf](./docs/evensong-paper-en.pdf) |
 | Evensong R012-E Benchmark | Chinese | [evensong-paper-zh.pdf](./docs/evensong-paper-zh.pdf) |
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## Vault Tiers {#tiers}
+## Vault Tiers
 
-### 04-memory — Three-Tier Memory {#memory-tiers}
+### 04-memory — Three-Tier Memory
 
 | Tier | Access | Write | Decay |
 |------|--------|-------|-------|
@@ -96,15 +97,15 @@ These figures are extracted from the **Evensong R012-E** benchmark paper.
 | `restricted/` | Admin only | Review gate | Medium (difficulty=2.0) |
 | `internal-only/` | Researcher only | Direct | Slow (difficulty=4.0) |
 
-### 03-internal-only — Strategy Layer {#strategy-layer}
+### 03-internal-only — Strategy Layer
 
 Contains sensitive strategy documents. No agent access — Researcher-only visibility.
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## Decay Algorithm {#decay}
+## Decay Algorithm
 
 Based on Ebbinghaus forgetting curve with **difficulty weighting**:
 
@@ -120,11 +121,11 @@ Default half-life: **72 hours**
 | 2.0 (tech) | 144h | Technical knowledge |
 | 0.5 (dialogue) | 36h | Conversation extracts |
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## Setup {#setup}
+## Setup
 
 ```bash
 # Clone this vault
@@ -137,11 +138,11 @@ cd dash-research-vault
 # Configure decay in 04-memory/.meta/decay-config.md
 ```
 
-[↑ Back to top](#top)
+[↑ Back to top](#dash-research-vault)
 
 ---
 
-## External Links {#links}
+## External Links
 
 | Resource | Description |
 |----------|-------------|
