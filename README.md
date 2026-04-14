@@ -2,7 +2,7 @@
 
 > Multi-agent research vault with Evensong-style memory causation, Ebbinghaus decay, and L2 pressure self-evolution.
 
-[![Research Vault](https://img.shields.io/badge/Research-Vault-blue?style=flat-square)](https://github.com/ProjectAlpha/dash-research-vault)
+[![Research Vault](https://img.shields.io/badge/Research-Vault-blue?style=flat-square)](https://github.com/Fearvox/dash-research-vault)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![Language: Bilingual](https://img.shields.io/badge/Language-EN%2BZH-yellow?style=flat-square)](README-zh.md)
 
@@ -90,7 +90,7 @@ Default half-life: **72 hours**
 
 ```bash
 # Clone this vault
-git clone https://github.com/ProjectAlpha/dash-research-vault.git
+git clone https://github.com/Fearvox/dash-research-vault.git
 cd dash-research-vault
 
 # Adapt to your team

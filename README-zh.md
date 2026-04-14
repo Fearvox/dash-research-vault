@@ -2,7 +2,7 @@
 
 > 多智能体研究知识库 — Evensong 风格记忆因果性 + Ebbinghaus 衰退 + L2 压力自进化
 
-[![Research Vault](https://img.shields.io/badge/Research-Vault-blue?style=flat-square)](https://github.com/ProjectAlpha/dash-research-vault)
+[![Research Vault](https://img.shields.io/badge/Research-Vault-blue?style=flat-square)](https://github.com/Fearvox/dash-research-vault)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![Language: Bilingual](https://img.shields.io/badge/Language-EN%2BZH-yellow?style=flat-square)](README.md)
 
@@ -90,7 +90,7 @@ retention(t) = e^(-t / (difficulty × half_life))
 
 ```bash
 # 克隆知识库
-git clone https://github.com/ProjectAlpha/dash-research-vault.git
+git clone https://github.com/Fearvox/dash-research-vault.git
 cd dash-research-vault
 
 # 适配你的团队
