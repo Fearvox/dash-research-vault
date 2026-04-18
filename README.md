@@ -157,7 +157,7 @@ The vault is filesystem-native — no database, no daemon. Any agent that can re
 |---|---|
 | [evensong.zonicdesign.art](https://evensong.zonicdesign.art) | NAV portal — film + benchmarks + CLI showcase |
 | [evensong.zonicdesign.art/promo](https://evensong.zonicdesign.art/promo) | 2-minute promotional film (1080p) |
-| [DASH SHATTER](https://dash-shatter.vercel.app) | Agent product site |
+| [DASH SHATTER](https://dash.zonicdesign.art) | Agent product site |
 | [EverMind.ai](https://evermind.ai) | Memory & cognition research platform (related work) |
 
 ---

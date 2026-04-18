@@ -157,7 +157,7 @@ Vault 是 filesystem-native — 无数据库、无 daemon。任何能读 Markdow
 |---|---|
 | [evensong.zonicdesign.art](https://evensong.zonicdesign.art) | NAV 入口 — 宣传片 + benchmark + CLI 展示 |
 | [evensong.zonicdesign.art/promo](https://evensong.zonicdesign.art/promo) | 2 分钟宣传片（1080p） |
-| [DASH SHATTER](https://dash-shatter.vercel.app) | Agent 产品站 |
+| [DASH SHATTER](https://dash.zonicdesign.art) | Agent 产品站 |
 | [EverMind.ai](https://evermind.ai) | 记忆与认知研究平台（相关工作） |
 
 ---
