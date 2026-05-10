@@ -58,6 +58,8 @@ dash-research-vault/
 │   ├── public/          ← All agents readable (client / dialogue / industry)
 │   ├── restricted/      ← Admin-only (evolution / relationship / risk)
 │   └── .meta/           ← Decay configuration
+├── packages/
+│   └── research-vault-mcp/ ← Installable MCP server for vault search/status tools
 └── docs/                ← Research papers (EN + ZH)
 ```
 
@@ -151,10 +153,23 @@ The vault is filesystem-native — no database, no daemon. Any agent that can re
 
 ---
 
+## MCP package
+
+The installable MCP server lives in [`packages/research-vault-mcp`](./packages/research-vault-mcp).
+
+```bash
+npx @syndash/research-vault-mcp --transport=stdio
+```
+
+It exposes public-safe vault search, taxonomy, status, queue, and bounded read tools by default. Mutation tools stay hidden unless the operator explicitly widens `MCP_PROFILE`.
+
+---
+
 ## Live artifacts
 
 | Resource | What it is |
 |---|---|
+| [`@syndash/research-vault-mcp`](https://www.npmjs.com/package/@syndash/research-vault-mcp) | Installable MCP server for Research Vault |
 | [evensong.zonicdesign.art](https://evensong.zonicdesign.art) | NAV portal — film + benchmarks + CLI showcase |
 | [evensong.zonicdesign.art/promo](https://evensong.zonicdesign.art/promo) | 2-minute promotional film (1080p) |
 | [DASH SHATTER](https://dash.zonicdesign.art) | Agent product site |

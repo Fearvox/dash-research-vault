@@ -58,6 +58,8 @@ dash-research-vault/
 │   ├── public/          ← 所有 agent 可读 (client / dialogue / industry)
 │   ├── restricted/      ← 仅 Admin (evolution / relationship / risk)
 │   └── .meta/           ← 衰退配置
+├── packages/
+│   └── research-vault-mcp/ ← 可安装的 vault search/status MCP server
 └── docs/                ← 研究论文（中英）
 ```
 
@@ -151,10 +153,23 @@ Vault 是 filesystem-native — 无数据库、无 daemon。任何能读 Markdow
 
 ---
 
+## MCP package
+
+可安装的 MCP server 在 [`packages/research-vault-mcp`](./packages/research-vault-mcp)。
+
+```bash
+npx @syndash/research-vault-mcp --transport=stdio
+```
+
+默认只暴露 public-safe 的 vault search、taxonomy、status、queue 和 bounded read 工具。写入工具默认隐藏，只有 operator 显式放宽 `MCP_PROFILE` 才启用。
+
+---
+
 ## 在线产物
 
 | 资源 | 说明 |
 |---|---|
+| [`@syndash/research-vault-mcp`](https://www.npmjs.com/package/@syndash/research-vault-mcp) | Research Vault 的可安装 MCP server |
 | [evensong.zonicdesign.art](https://evensong.zonicdesign.art) | NAV 入口 — 宣传片 + benchmark + CLI 展示 |
 | [evensong.zonicdesign.art/promo](https://evensong.zonicdesign.art/promo) | 2 分钟宣传片（1080p） |
 | [DASH SHATTER](https://dash.zonicdesign.art) | Agent 产品站 |

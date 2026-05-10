@@ -1,0 +1,49 @@
+{
+  "name": "@syndash/research-vault-mcp",
+  "version": "1.1.4",
+  "description": "DASH Research Vault MCP server — local-first semantic search, note persistence, and public-safe knowledge-base tools for MCP-compatible agents.",
+  "type": "module",
+  "bin": {
+    "research-vault-mcp": "bin/research-vault-mcp.mjs"
+  },
+  "scripts": {
+    "dev": "bun run src/server.ts",
+    "build": "bun build src/server.ts --outdir=dist --target=bun",
+    "prepack": "bun run build",
+    "test": "bun test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fearvox/dash-research-vault.git",
+    "directory": "packages/research-vault-mcp"
+  },
+  "homepage": "https://github.com/Fearvox/dash-research-vault/tree/main/packages/research-vault-mcp",
+  "bugs": {
+    "url": "https://github.com/Fearvox/dash-research-vault/issues"
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src/**/*.ts",
+    "dist/**/*.js",
+    "bin/**/*.mjs",
+    "README.md",
+    "CHANGELOG.md",
+    "package.json"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "research-vault",
+    "claude-code",
+    "evermind",
+    "dash-shatter",
+    "syndash"
+  ],
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
+    "markitdown": "latest"
+  }
+}
