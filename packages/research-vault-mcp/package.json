@@ -43,7 +43,7 @@
     "syndash"
   ],
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.88.0",
+    "@anthropic-ai/sdk": "^0.95.1",
     "markitdown": "latest"
   }
 }
