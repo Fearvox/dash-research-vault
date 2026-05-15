@@ -56,6 +56,21 @@ $VAULT_ROOT/
 └── raw/_inbox/                         ← read by vault_batch_analyze
 ```
 
+Then refresh the freshness fixture so timestamps are relative to your clock:
+
+```bash
+bun examples/quickstart-vault/refresh-fixture.ts
+```
+
+The MCP server flags any analysis older than 7 days as stale
+(`staleVerdict` in `evidence_metadata.ts`). The shipped
+`.meta/decay-scores.json` carries fixed dates for repo readability,
+which means it goes stale about a week after this PR lands. The
+helper rewrites `lastAnalyzedAt` to `now − 1 day` and
+`lastAccess` to `now − 2 days`, so the documented
+`freshness_verdict: "PASS"` holds whenever you clone. Re-run it any
+time the vault drifts back into the FLAG window.
+
 ---
 
 ## 3. Run the MCP server
@@ -189,7 +204,7 @@ Pass `include_content: true` for the full body (still capped at 12000).
       { "itemId": "sample-conversation", "score": 0.62, "accesses": 7 }
     ],
     "analyzed_coverage": 1.0,
-    "last_analyzed_at": "2026-05-14T08:00:00.000Z",
+    "last_analyzed_at": "<recent ISO, within the 7-day freshness window>",
     "release": {
       "package_name": "@syndash/research-vault-mcp",
       "freshness_verdict": "FLAG",
