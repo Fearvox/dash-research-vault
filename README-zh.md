@@ -151,6 +151,8 @@ cd dash-research-vault
 
 Vault 是 filesystem-native — 无数据库、无 daemon。任何能读 Markdown 的 agent 就能读这个 vault。写门控脚本你自己加。
 
+> **五分钟可复现路径：** 见 [QUICKSTART.md](./QUICKSTART.md) — 安装 MCP server，把它指向仓库自带的 sample vault，跟着走完 `vault_search` → `vault_status` → `readonly` / `full` / `admin` 安全边界，每一步都附带真实的输出片段。
+
 ---
 
 ## MCP package
