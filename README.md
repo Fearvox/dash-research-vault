@@ -151,6 +151,8 @@ cd dash-research-vault
 
 The vault is filesystem-native — no database, no daemon. Any agent that can read Markdown can read the vault. Add your own write-gate scripts on top.
 
+> **Five-minute reproducible path:** see [QUICKSTART.md](./QUICKSTART.md) — installs the MCP server, points it at the included sample vault, and walks through `vault_search` → `vault_status` → the `readonly` / `full` / `admin` safety boundary with expected output snippets.
+
 ---
 
 ## MCP package
