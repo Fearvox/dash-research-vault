@@ -1,0 +1,22 @@
+[
+  {
+    "itemId": "sample-conversation",
+    "score": 0.62,
+    "lastAccess": "2026-05-12T09:14:22.000Z",
+    "lastAnalyzedAt": "2026-05-13T16:02:11.000Z",
+    "accessCount": 7,
+    "summaryLevel": "shallow",
+    "nextReviewAt": "2026-05-19T00:00:00.000Z",
+    "difficulty": 0.5
+  },
+  {
+    "itemId": "sample-trend",
+    "score": 0.91,
+    "lastAccess": "2026-05-13T11:45:00.000Z",
+    "lastAnalyzedAt": "2026-05-14T08:00:00.000Z",
+    "accessCount": 3,
+    "summaryLevel": "deep",
+    "nextReviewAt": "2026-05-25T00:00:00.000Z",
+    "difficulty": 2.0
+  }
+]
