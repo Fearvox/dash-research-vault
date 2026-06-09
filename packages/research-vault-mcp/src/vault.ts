@@ -330,22 +330,31 @@ const vaultTools = [
         }
       })
 
-      const hasStale = results.some(result => result.freshness_verdict === 'FLAG')
+      const hasAnalysisRisk = results.some(result => ['STALE', 'INVALID'].includes(result.analysis_verdict))
+      const hasNotAnalyzed = results.some(result => result.analysis_verdict === 'NOT_ANALYZED')
       const envelope = okEnvelope(
         { query, category, results, total: results.length },
-        hasStale
+        hasAnalysisRisk
           ? flagGuidance(
-            'Search completed, but one or more results lack fresh analysis metadata.',
-            'Use source_ref for readonly follow-up and refresh analysis metadata in the operator lane if needed.',
+            'Search completed, but one or more results have stale or invalid analysis metadata.',
+            'Use source_ref for readonly follow-up and refresh stale analysis metadata in the operator lane if needed.',
             'vault_get',
           )
           : passGuidance(
-            'Search completed with provenance and freshness metadata.',
-            'Use source_ref or vault_get for bounded follow-up evidence.',
+            hasNotAnalyzed
+              ? 'Search completed; one or more readable results have not been analyzed yet.'
+              : 'Search completed with provenance and freshness metadata.',
+            hasNotAnalyzed
+              ? 'Use source_ref or vault_get for bounded follow-up evidence; treat NOT_ANALYZED as an analysis caveat, not missing content.'
+              : 'Use source_ref or vault_get for bounded follow-up evidence.',
             'vault_get',
           ),
         {
-          freshness: hasStale ? 'Some search results are missing or stale analysis timestamps.' : 'Search result analysis metadata is fresh.',
+          freshness: hasAnalysisRisk
+            ? 'Some search results have stale or invalid analysis timestamps.'
+            : hasNotAnalyzed
+              ? 'Some readable search results do not have analysis timestamps yet.'
+              : 'Search result analysis metadata is fresh.',
           provenance: 'vault_search result source_ref values are vault:// references without local paths.',
         },
       )

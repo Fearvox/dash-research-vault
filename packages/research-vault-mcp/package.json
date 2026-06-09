@@ -1,6 +1,6 @@
 {
   "name": "@syndash/research-vault-mcp",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "DASH Research Vault MCP server — local-first semantic search, note persistence, and public-safe knowledge-base tools for MCP-compatible agents.",
   "type": "module",
   "bin": {

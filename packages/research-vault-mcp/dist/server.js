@@ -270,6 +270,9 @@ function clamp(value, min, max) {
 function lower(value) {
   return (value ?? "").toLowerCase();
 }
+function normalized(value) {
+  return lower(value).replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+}
 function queryTerms(query) {
   return lower(query).split(/\s+/).map((term) => term.trim()).filter(Boolean);
 }
@@ -278,12 +281,17 @@ function includesQuery(value, query) {
   if (terms.length === 0)
     return false;
   const haystack = lower(value);
-  return terms.some((term) => haystack.includes(term));
+  const normalizedHaystack = normalized(value);
+  return terms.some((term) => haystack.includes(term)) || normalized(queryTerms(query).join(" ")).split(/\s+/).some((term) => normalizedHaystack.includes(term));
+}
+function equalsQuery(value, query) {
+  return Boolean(query?.trim()) && lower(value).trim() === lower(query).trim();
 }
 function matchedFields(entry, query) {
   if (!query?.trim())
     return [];
   const candidates = [
+    ["id_exact", equalsQuery(entry.id, query) ? entry.id : undefined],
     ["title", entry.title],
     ["content", entry.content],
     ["id", entry.id],
@@ -297,6 +305,8 @@ function whyMatched(entry, query, fields) {
   if (fields.length === 0)
     return "Result is included after filters; no direct field match was detected.";
   const labels = fields.map((field) => {
+    if (field === "id_exact")
+      return "exact id";
     if (field === "title")
       return "title";
     if (field === "content")
@@ -311,21 +321,21 @@ function snippetFromContent(content, query, maxChars = 240) {
   const limit = Math.max(0, Math.floor(maxChars));
   if (limit === 0)
     return "";
-  const normalized = content.replace(/\s+/g, " ").trim();
-  if (normalized.length <= limit)
-    return normalized;
+  const normalized2 = content.replace(/\s+/g, " ").trim();
+  if (normalized2.length <= limit)
+    return normalized2;
   const terms = queryTerms(query);
-  const lowerContent = lower(normalized);
+  const lowerContent = lower(normalized2);
   const hitIndex = terms.map((term) => lowerContent.indexOf(term)).filter((index) => index >= 0).sort((a, b) => a - b)[0];
   if (hitIndex === undefined)
-    return normalized.slice(0, limit).trimEnd();
+    return normalized2.slice(0, limit).trimEnd();
   const halfWindow = Math.floor(limit / 2);
-  const start = Math.max(0, Math.min(hitIndex - halfWindow, normalized.length - limit));
-  const end = Math.min(normalized.length, start + limit);
+  const start = Math.max(0, Math.min(hitIndex - halfWindow, normalized2.length - limit));
+  const end = Math.min(normalized2.length, start + limit);
   const prefix = start > 0 ? "..." : "";
-  const suffix = end < normalized.length ? "..." : "";
+  const suffix = end < normalized2.length ? "..." : "";
   const available = Math.max(0, limit - prefix.length - suffix.length);
-  return `${prefix}${normalized.slice(start, start + available).trim()}${suffix}`;
+  return `${prefix}${normalized2.slice(start, start + available).trim()}${suffix}`;
 }
 function staleVerdict(lastAnalyzedAt) {
   if (!lastAnalyzedAt) {
@@ -341,14 +351,46 @@ function staleVerdict(lastAnalyzedAt) {
   }
   return { verdict: "PASS", reason: "Analysis is fresh enough for the read surface." };
 }
+function analysisVerdict(lastAnalyzedAt) {
+  if (!lastAnalyzedAt) {
+    return {
+      verdict: "NOT_ANALYZED",
+      freshness_verdict: "PASS",
+      reason: "No analysis timestamp was provided; content can still be readable."
+    };
+  }
+  const freshness = staleVerdict(lastAnalyzedAt);
+  if (freshness.verdict === "PASS") {
+    return {
+      verdict: "PASS",
+      freshness_verdict: "PASS",
+      reason: freshness.reason
+    };
+  }
+  if (freshness.reason.includes("could not be parsed")) {
+    return {
+      verdict: "INVALID",
+      freshness_verdict: "FLAG",
+      reason: freshness.reason
+    };
+  }
+  return {
+    verdict: "STALE",
+    freshness_verdict: "FLAG",
+    reason: freshness.reason
+  };
+}
 function itemFreshness(entry) {
   const lastAnalyzedAt = entry.score?.lastAnalyzedAt ?? null;
-  const verdict = staleVerdict(lastAnalyzedAt);
+  const analysis = analysisVerdict(lastAnalyzedAt);
   return {
     last_analyzed_at: lastAnalyzedAt,
     source_mtime: entry.modified || null,
-    freshness_verdict: verdict.verdict,
-    freshness_reason: verdict.reason
+    readability_verdict: "PASS",
+    index_verdict: "PASS",
+    analysis_verdict: analysis.verdict,
+    freshness_verdict: analysis.freshness_verdict,
+    freshness_reason: analysis.reason
   };
 }
 function queueFreshness(queueItems) {
@@ -672,9 +714,10 @@ var vaultTools = [
           ...freshness
         };
       });
-      const hasStale = results.some((result) => result.freshness_verdict === "FLAG");
-      const envelope = okEnvelope({ query, category, results, total: results.length }, hasStale ? flagGuidance("Search completed, but one or more results lack fresh analysis metadata.", "Use source_ref for readonly follow-up and refresh analysis metadata in the operator lane if needed.", "vault_get") : passGuidance("Search completed with provenance and freshness metadata.", "Use source_ref or vault_get for bounded follow-up evidence.", "vault_get"), {
-        freshness: hasStale ? "Some search results are missing or stale analysis timestamps." : "Search result analysis metadata is fresh.",
+      const hasAnalysisRisk = results.some((result) => ["STALE", "INVALID"].includes(result.analysis_verdict));
+      const hasNotAnalyzed = results.some((result) => result.analysis_verdict === "NOT_ANALYZED");
+      const envelope = okEnvelope({ query, category, results, total: results.length }, hasAnalysisRisk ? flagGuidance("Search completed, but one or more results have stale or invalid analysis metadata.", "Use source_ref for readonly follow-up and refresh stale analysis metadata in the operator lane if needed.", "vault_get") : passGuidance(hasNotAnalyzed ? "Search completed; one or more readable results have not been analyzed yet." : "Search completed with provenance and freshness metadata.", hasNotAnalyzed ? "Use source_ref or vault_get for bounded follow-up evidence; treat NOT_ANALYZED as an analysis caveat, not missing content." : "Use source_ref or vault_get for bounded follow-up evidence.", "vault_get"), {
+        freshness: hasAnalysisRisk ? "Some search results have stale or invalid analysis timestamps." : hasNotAnalyzed ? "Some readable search results do not have analysis timestamps yet." : "Search result analysis metadata is fresh.",
         provenance: "vault_search result source_ref values are vault:// references without local paths."
       });
       return {

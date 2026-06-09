@@ -3,6 +3,7 @@ import { mkdirSync, rmSync, utimesSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
 import {
+  analysisVerdict,
   matchedFields,
   releaseMetadata,
   snippetFromContent,
@@ -67,6 +68,14 @@ describe('evidence metadata helpers', () => {
     expect(staleVerdict(isoDaysAgo(1)).verdict).toBe('PASS')
   })
 
+  test('analysisVerdict separates not analyzed from stale analysis', () => {
+    expect(analysisVerdict().verdict).toBe('NOT_ANALYZED')
+    expect(analysisVerdict().freshness_verdict).toBe('PASS')
+    expect(analysisVerdict(isoDaysAgo(9)).verdict).toBe('STALE')
+    expect(analysisVerdict(isoDaysAgo(9)).freshness_verdict).toBe('FLAG')
+    expect(analysisVerdict(isoDaysAgo(1)).verdict).toBe('PASS')
+  })
+
   test('releaseMetadata returns env values and FLAG shape when missing', () => {
     const present = releaseMetadata({
       RESEARCH_VAULT_NPM_LATEST_VERSION: '1.2.3',
@@ -123,6 +132,53 @@ describe('vault read evidence metadata', () => {
     expect(result.freshness_verdict).toBe('PASS')
     expect(result).not.toHaveProperty('path')
     expect(JSON.stringify(envelope)).not.toContain(TMP)
+  })
+
+  test('search treats readable notes without lastAnalyzedAt as NOT_ANALYZED, not global FLAG', async () => {
+    writeFileSync(
+      join(TMP, 'knowledge', 'test', '20260608--readable-raw-note.md'),
+      '# Readable Raw Note\n\nThis readable note has no analysis timestamp.',
+      'utf-8',
+    )
+    writeFileSync(join(TMP, '.meta', 'decay-scores.json'), JSON.stringify({
+      '20260608--readable-raw-note': {
+        itemId: '20260608--readable-raw-note',
+        score: 0.8,
+        lastAccess: isoDaysAgo(1),
+        accessCount: 2,
+        summaryLevel: 'deep',
+        nextReviewAt: isoDaysAgo(-2),
+        difficulty: 1,
+      },
+    }), 'utf-8')
+
+    const search = await tool('vault_search')
+    const envelope = parseToolResult(await search.call({ query: 'readable raw', limit: 5 }))
+    const result = envelope.data.results[0]
+
+    expect(envelope.ok).toBe(true)
+    expect(envelope.agent_guidance.verdict).toBe('PASS')
+    expect(result.readability_verdict).toBe('PASS')
+    expect(result.index_verdict).toBe('PASS')
+    expect(result.analysis_verdict).toBe('NOT_ANALYZED')
+    expect(result.freshness_verdict).toBe('PASS')
+    expect(result.freshness_reason).toContain('No analysis timestamp')
+  })
+
+  test('search supports exact id and slash-heavy category matching', async () => {
+    mkdirSync(join(TMP, 'knowledge', 'software-engineering', 'game-design'), { recursive: true })
+    writeFileSync(
+      join(TMP, 'knowledge', 'software-engineering', 'game-design', '20260608--music-rhythm.md'),
+      '# Music/Rhythm Ceremony\n\nStage feel note.',
+      'utf-8',
+    )
+
+    const search = await tool('vault_search')
+    const idEnvelope = parseToolResult(await search.call({ query: '20260608--music-rhythm', limit: 5 }))
+    const categoryEnvelope = parseToolResult(await search.call({ query: 'software engineering game design', limit: 5 }))
+
+    expect(idEnvelope.data.results[0].matched_fields).toContain('id_exact')
+    expect(categoryEnvelope.data.results[0].matched_fields).toContain('category')
   })
 
   test('status includes release, coverage, and freshness fields', async () => {

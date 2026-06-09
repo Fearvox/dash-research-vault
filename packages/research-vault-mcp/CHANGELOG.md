@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 1.1.5 — 2026-06-08
+
+### Changed
+
+- `vault_search` now separates read/index/analysis state with `readability_verdict`, `index_verdict`, and `analysis_verdict`.
+- Readable search hits without `lastAnalyzedAt` now return `analysis_verdict: "NOT_ANALYZED"` without turning the overall search guidance into a scary `FLAG`.
+- Exact-id search hits are marked with `matched_fields: ["id_exact"]`.
+- Slash-heavy titles/categories are easier to find through punctuation-normalized matching, such as `Music/Rhythm` via `music rhythm`.
+
+### Verified
+
+- `bun test packages/research-vault-mcp/__tests__/vault_evidence_metadata.test.ts`
+
 ## 1.1.4 — 2026-05-10
 
 ### Changed
