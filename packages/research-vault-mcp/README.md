@@ -95,6 +95,31 @@ Mutation tools are hidden and blocked in `readonly`. `MCP_PROFILE=full` enables 
 
 `vault_get` is bounded by default: it returns an excerpt unless the operator approves `include_content:true`, and even full-content requests are capped by `max_chars`. Search, status, and batch responses include `agent_guidance` plus evidence metadata for provenance, freshness, profile, and public-safety state.
 
+## Search and read semantics
+
+`vault_search` is an index/readability surface. It answers whether the query matched saved knowledge entries and whether those entries are readable. It does not treat missing analysis metadata as missing content.
+
+Search matching covers:
+
+- exact note IDs, marked with `matched_fields: ["id_exact"]`
+- titles, note content, IDs, and categories
+- punctuation-normalized text, so slash-heavy categories such as `software-engineering/game-design` can be found with `software engineering game design`
+
+Search results separate the relevant states:
+
+```json
+{
+  "readability_verdict": "PASS",
+  "index_verdict": "PASS",
+  "analysis_verdict": "NOT_ANALYZED",
+  "freshness_verdict": "PASS"
+}
+```
+
+That means the note matched and is readable, but has no `lastAnalyzedAt` yet. Treat `NOT_ANALYZED` as an analysis caveat, not a broken read. Stale or invalid analysis timestamps still produce a `FLAG`.
+
+`vault_get` is the authoritative exact-ID read path for follow-up evidence. Call `vault_search` first, then pass the exact returned `id` to `vault_get`.
+
 ## Tools exposed
 
 Current MCP contract:
@@ -148,4 +173,4 @@ Apache-2.0 for package code. Research artifacts in the repository root may use s
 
 ## Releases
 
-See [CHANGELOG.md](./CHANGELOG.md). Current npm release: `1.1.4`.
+See [CHANGELOG.md](./CHANGELOG.md). Current npm release: `1.1.5`.

@@ -1,9 +1,18 @@
 import type { DecayScore, VaultEntry } from './types.ts'
 
 export type FreshnessVerdict = 'PASS' | 'FLAG'
+export type ReadabilityVerdict = 'PASS' | 'MISSING'
+export type IndexVerdict = 'PASS' | 'NO_MATCH'
+export type AnalysisVerdict = 'PASS' | 'STALE' | 'NOT_ANALYZED' | 'INVALID'
 
 export interface FreshnessShape {
   verdict: FreshnessVerdict
+  reason: string
+}
+
+export interface AnalysisShape {
+  verdict: AnalysisVerdict
+  freshness_verdict: FreshnessVerdict
   reason: string
 }
 
@@ -18,6 +27,13 @@ function lower(value: string | undefined | null): string {
   return (value ?? '').toLowerCase()
 }
 
+function normalized(value: string | undefined | null): string {
+  return lower(value)
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 function queryTerms(query?: string): string[] {
   return lower(query)
     .split(/\s+/)
@@ -29,13 +45,20 @@ function includesQuery(value: string | undefined, query?: string): boolean {
   const terms = queryTerms(query)
   if (terms.length === 0) return false
   const haystack = lower(value)
+  const normalizedHaystack = normalized(value)
   return terms.some(term => haystack.includes(term))
+    || normalized(queryTerms(query).join(' ')).split(/\s+/).some(term => normalizedHaystack.includes(term))
+}
+
+function equalsQuery(value: string | undefined, query?: string): boolean {
+  return Boolean(query?.trim()) && lower(value).trim() === lower(query).trim()
 }
 
 export function matchedFields(entry: VaultEntry & { content?: string }, query?: string): string[] {
   if (!query?.trim()) return []
 
   const candidates: Array<[string, string | undefined]> = [
+    ['id_exact', equalsQuery(entry.id, query) ? entry.id : undefined],
     ['title', entry.title],
     ['content', entry.content],
     ['id', entry.id],
@@ -52,6 +75,7 @@ export function whyMatched(entry: VaultEntry & { content?: string }, query: stri
   if (fields.length === 0) return 'Result is included after filters; no direct field match was detected.'
 
   const labels = fields.map(field => {
+    if (field === 'id_exact') return 'exact id'
     if (field === 'title') return 'title'
     if (field === 'content') return 'note content'
     if (field === 'category') return 'category'
@@ -104,15 +128,51 @@ export function staleVerdict(lastAnalyzedAt?: string | null): FreshnessShape {
   return { verdict: 'PASS', reason: 'Analysis is fresh enough for the read surface.' }
 }
 
+export function analysisVerdict(lastAnalyzedAt?: string | null): AnalysisShape {
+  if (!lastAnalyzedAt) {
+    return {
+      verdict: 'NOT_ANALYZED',
+      freshness_verdict: 'PASS',
+      reason: 'No analysis timestamp was provided; content can still be readable.',
+    }
+  }
+
+  const freshness = staleVerdict(lastAnalyzedAt)
+  if (freshness.verdict === 'PASS') {
+    return {
+      verdict: 'PASS',
+      freshness_verdict: 'PASS',
+      reason: freshness.reason,
+    }
+  }
+
+  if (freshness.reason.includes('could not be parsed')) {
+    return {
+      verdict: 'INVALID',
+      freshness_verdict: 'FLAG',
+      reason: freshness.reason,
+    }
+  }
+
+  return {
+    verdict: 'STALE',
+    freshness_verdict: 'FLAG',
+    reason: freshness.reason,
+  }
+}
+
 export function itemFreshness(entry: VaultEntry & { score?: DecayScore & { lastAnalyzedAt?: string } }) {
   const lastAnalyzedAt = entry.score?.lastAnalyzedAt ?? null
-  const verdict = staleVerdict(lastAnalyzedAt)
+  const analysis = analysisVerdict(lastAnalyzedAt)
 
   return {
     last_analyzed_at: lastAnalyzedAt,
     source_mtime: entry.modified || null,
-    freshness_verdict: verdict.verdict,
-    freshness_reason: verdict.reason,
+    readability_verdict: 'PASS' as ReadabilityVerdict,
+    index_verdict: 'PASS' as IndexVerdict,
+    analysis_verdict: analysis.verdict,
+    freshness_verdict: analysis.freshness_verdict,
+    freshness_reason: analysis.reason,
   }
 }
 
