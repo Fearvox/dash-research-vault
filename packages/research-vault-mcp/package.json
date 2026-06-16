@@ -1,6 +1,6 @@
 {
   "name": "@syndash/research-vault-mcp",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "DASH Research Vault MCP server — local-first semantic search, note persistence, and public-safe knowledge-base tools for MCP-compatible agents.",
   "type": "module",
   "bin": {
@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/Fearvox/dash-research-vault/issues"
   },
-  "license": "Apache-2.0",
+  "license": "CC-BY-NC-ND-4.0",
   "publishConfig": {
     "access": "public"
   },
@@ -30,6 +30,7 @@
     "dist/**/*.js",
     "bin/**/*.mjs",
     "README.md",
+    "LICENSE",
     "CHANGELOG.md",
     "package.json"
   ],

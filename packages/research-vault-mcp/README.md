@@ -144,6 +144,7 @@ Published packages include:
 - `dist/server.js`
 - `src/**/*.ts` for source inspection
 - `README.md`
+- `LICENSE`
 - `CHANGELOG.md`
 - `package.json`
 
@@ -169,8 +170,8 @@ The package is intentionally Bun-native today because the server uses Bun APIs. 
 
 ## License
 
-Apache-2.0 for package code. Research artifacts in the repository root may use separate licenses; check the repository root license files.
+Released under the same license as the monorepo root: [CC BY-NC-ND 4.0](./LICENSE). You may share unmodified copies with attribution for non-commercial use. For commercial licensing or research collaboration, open an issue in the source repository.
 
 ## Releases
 
-See [CHANGELOG.md](./CHANGELOG.md). Current npm release: `1.1.5`.
+See [CHANGELOG.md](./CHANGELOG.md). Current npm release: `1.1.6`.

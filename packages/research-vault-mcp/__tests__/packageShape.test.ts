@@ -58,6 +58,7 @@ describe('@syndash/research-vault-mcp package shape (npx publish readiness)', ()
     expect(Array.isArray(pkg.files)).toBe(true)
     expect(pkg.files.length).toBeGreaterThan(0)
     expect(pkg.files).toContain('README.md')
+    expect(pkg.files).toContain('LICENSE')
     expect(pkg.files).toContain('package.json')
     expect(pkg.files).toContain('dist/**/*.js')
   })
@@ -66,8 +67,11 @@ describe('@syndash/research-vault-mcp package shape (npx publish readiness)', ()
     expect(pkg.scripts?.prepack).toBe('bun run build')
   })
 
-  test('uses Apache-2.0 package license', () => {
-    expect(pkg.license).toBe('Apache-2.0')
+  test('uses the monorepo package license', () => {
+    expect(pkg.license).toBe('CC-BY-NC-ND-4.0')
+    const packageLicense = readFileSync(join(PKG_ROOT, 'LICENSE'), 'utf8')
+    expect(packageLicense).toContain('CC BY-NC-ND 4.0')
+    expect(packageLicense).toContain('Non-Commercial Use Only')
   })
 
   test('README.md documents stdio launch', () => {

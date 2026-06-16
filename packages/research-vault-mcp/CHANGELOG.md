@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 1.1.6 — 2026-06-16
+
+### Fixed
+
+- Aligned npm package license metadata with the monorepo root `LICENSE`.
+- Added `LICENSE` to the published package artifact so npm installs include the governing license text.
+- Updated README package mechanics and license language to match the packaged artifact.
+
 ## 1.1.5 — 2026-06-08
 
 ### Changed
